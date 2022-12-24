@@ -1,0 +1,62 @@
+version: "3"
+
+networks:
+  local:
+    driver: bridge
+
+volumes:
+  dbdata:
+    driver: local
+
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: NoI{Hcx(Qjoa3yAZ4bl4
+      MARIADB_AUTO_UPGRADE: "1"
+      MARIADB_INITDB_SKIP_TZINFO: "1"
+    ports:
+      - 3306:3306
+    volumes:
+      - dbdata:/var/lib/mysql/
+    networks:
+      - local
+
+  php:
+    build:
+      args:
+        user: ubuntu
+        uid: 1001
+      context: ./
+      dockerfile: app.Dockerfile
+    image: php-fpm:laravel
+    container_name: php
+    restart: unless-stopped
+    working_dir: /var/www
+    depends_on:
+      - mariadb
+    volumes:
+      - ./:/var/www
+    networks:
+      - local
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    restart: unless-stopped
+    working_dir: /var/www/
+    depends_on:
+      - mariadb
+      - php
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./:/var/www
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - local
+    command: "/bin/sh -c 'trap exit TERM; while :; do nginx -s reload; sleep 24h & wait $${!}; done & exec nginx -g \"daemon off;\"'"
+
