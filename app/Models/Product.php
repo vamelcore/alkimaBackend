@@ -14,7 +14,7 @@ class Product extends Model
         'price',
     ];
 
-    public function category()
+    public function categories()
     {
         return $this->belongsToMany(Category::class);
     }
