@@ -211,5 +211,6 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
+    'pagination_per_page' => env('PAGINATION_PER_PAGE', 20),
 
 ];
