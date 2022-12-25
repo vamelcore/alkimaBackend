@@ -1,0 +1,90 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "SandBOX API Documentnation",
+        "description": "Swagger OpenApi Documentnation",
+        "version": "v1"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8001/api/v1",
+            "description": "API Server"
+        }
+    ],
+    "paths": {
+        "/categories": {
+            "get": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Get category list",
+                "description": "Get category list",
+                "operationId": "categoriesList",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page",
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/CategoryResource"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "CategoryResource": {
+                "title": "Category",
+                "description": "API category item",
+                "properties": {
+                    "id": {
+                        "description": "Identifier",
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "title": {
+                        "description": "Categoty title",
+                        "type": "string",
+                        "example": "Title"
+                    },
+                    "created_at": {
+                        "description": "Create date",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2022-12-25T10:47:23.000000Z"
+                    },
+                    "updated_at": {
+                        "description": "Update date",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2022-12-25T10:47:23.000000Z"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "CategoryResource"
+                }
+            }
+        }
+    }
+}

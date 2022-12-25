@@ -6,6 +6,7 @@ use App\Contracts\Api\CategoryInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\CategoryCreateRequest;
 use App\Http\Requests\Api\CategoryUpdateRequest;
+use OpenApi\Annotations as OA;
 
 class CategoryController extends Controller
 {
@@ -26,6 +27,28 @@ class CategoryController extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\JsonResponse
+     */
+    /**
+     * @OA\Get(
+     * path="/categories",
+     * operationId="categoriesList",
+     * tags={"Categories"},
+     * summary="Get category list",
+     * description="Get category list",
+     *     @OA\Parameter(
+     *         name="page",
+     *         in="query",
+     *         description="Page",
+     *         required=false,
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/CategoryResource"))
+     *         )
+     *     ),
+     * )
      */
     public function index()
     {
