@@ -24,7 +24,7 @@ class CategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => ['required', 'string', 'min:3', 'max:12'],
+            'title' => ['required', 'string', 'between:3,12'],
         ];
     }
 }
