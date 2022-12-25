@@ -32,7 +32,8 @@ class ApiServiceProvider extends ServiceProvider
      * @var array
      */
     public $bindings = [
-        \App\Contracts\Api\CategoryInterface::class => \App\Services\Api\CategoryService::class
+        \App\Contracts\Api\CategoryInterface::class => \App\Services\Api\CategoryService::class,
+        \App\Contracts\Api\ProductInterface::class => \App\Services\Api\ProductService::class,
     ];
 
     /**

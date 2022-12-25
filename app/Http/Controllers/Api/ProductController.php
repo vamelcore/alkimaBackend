@@ -2,58 +2,56 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Contracts\Api\ProductInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\ProductCreateRequest;
 use App\Http\Requests\Api\ProductUpdateRequest;
-use App\Http\Resources\Api\ProductResource;
-use App\Http\Resources\BaseResource;
-use App\Models\Product;
-use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
     /**
+     * @var ProductInterface
+     */
+    public $service;
+
+    /**
+     * @param ProductInterface $service
+     */
+    public function __construct(ProductInterface $service)
+    {
+        $this->service = $service;
+    }
+
+    /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Resources\Json\JsonResource
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
-        return ProductResource::collection(
-            Product::latest('id')
-                ->with('categories')
-                ->paginate(config('app.pagination_per_page'))
-        );
+        return $this->service->list();
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Resources\Json\JsonResource
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(ProductCreateRequest $request)
     {
-        $product = new Product();
-        $product->fill($request->all());
-        $product->save();
-        $product->categories()->attach($request->get('categories'));
-        $product->load('categories');
-
-        return new ProductResource($product);
+        return $this->service->create($request);
     }
 
     /**
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Resources\Json\JsonResource
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(int $id)
     {
-        $product = Product::with('categories')->findOrFail($id);
-
-        return new ProductResource($product);
+        return $this->service->show($id);
     }
 
     /**
@@ -61,19 +59,11 @@ class ProductController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Resources\Json\JsonResource
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(ProductUpdateRequest $request, int $id)
     {
-        $product = Product::findOrFail($id);
-        $product->fill($request->all());
-        $product->save();
-        $request->whenFilled('categories', function ($input) use ($product) {
-            $product->categories()->sync($input);
-        });
-        $product->load('categories');
-
-        return new ProductResource($product);
+        return $this->service->update($request, $id);
 
     }
 
@@ -81,16 +71,10 @@ class ProductController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Resources\Json\JsonResource
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {
-        $product = Product::findOrFail($id);
-        $product->categories()->detach();
-        $product->delete();
-
-        return new BaseResource([
-            'message' => 'Deleted'
-        ]);
+        return $this->service->destroy($id);
     }
 }
