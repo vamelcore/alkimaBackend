@@ -2,54 +2,56 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Contracts\Api\CategoryInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\CategoryCreateRequest;
 use App\Http\Requests\Api\CategoryUpdateRequest;
-use App\Http\Resources\Api\CategoryResource;
-use App\Http\Resources\BaseResource;
-use App\Models\Category;
 
 class CategoryController extends Controller
 {
     /**
+     * @var CategoryInterface
+     */
+    public $service;
+
+    /**
+     * @param CategoryInterface $service
+     */
+    public function __construct(CategoryInterface $service)
+    {
+        $this->service = $service;
+    }
+
+    /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Resources\Json\JsonResource
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
-        return CategoryResource::collection(
-            Category::latest('id')
-                ->paginate(config('app.pagination_per_page'))
-        );
+        return $this->service->list();
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Resources\Json\JsonResource
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(CategoryCreateRequest $request)
     {
-        $category = new Category();
-        $category->fill($request->all());
-        $category->save();
-
-        return new CategoryResource($category);
+        return $this->service->create($request);
     }
 
     /**
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Resources\Json\JsonResource
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(int $id)
     {
-        $category = Category::findOrFail($id);
-
-        return new CategoryResource($category);
+        return $this->service->show($id);
     }
 
     /**
@@ -57,31 +59,21 @@ class CategoryController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Resources\Json\JsonResource
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(CategoryUpdateRequest $request, int $id)
     {
-        $category = Category::findOrFail($id);
-        $category->fill($request->all());
-        $category->save();
-
-        return new CategoryResource($category);
+        return $this->service->update($request, $id);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Resources\Json\JsonResource
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(int $id)
     {
-        $category = Category::findOrFail($id);
-        $category->products()->detach();
-        $category->delete();
-
-        return new BaseResource([
-            'message' => 'Deleted'
-        ]);
+        return $this->service->destroy($id);
     }
 }
