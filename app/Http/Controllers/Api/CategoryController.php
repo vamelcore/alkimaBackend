@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\CategoryRequest;
+use App\Http\Requests\Api\CategoryCreateRequest;
+use App\Http\Requests\Api\CategoryUpdateRequest;
 use App\Http\Resources\Api\CategoryResource;
+use App\Http\Resources\BaseResource;
 use App\Models\Category;
 
 class CategoryController extends Controller
@@ -16,7 +18,10 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return CategoryResource::collection(Category::latest('id')->paginate(config('app.pagination_per_page')));
+        return CategoryResource::collection(
+            Category::latest('id')
+                ->paginate(config('app.pagination_per_page'))
+        );
     }
 
     /**
@@ -25,7 +30,7 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Resources\Json\JsonResource
      */
-    public function store(CategoryRequest $request)
+    public function store(CategoryCreateRequest $request)
     {
         $category = new Category();
         $category->fill($request->all());
@@ -54,7 +59,7 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Resources\Json\JsonResource
      */
-    public function update(CategoryRequest $request, int $id)
+    public function update(CategoryUpdateRequest $request, int $id)
     {
         $category = Category::findOrFail($id);
         $category->fill($request->all());
@@ -72,8 +77,11 @@ class CategoryController extends Controller
     public function destroy(int $id)
     {
         $category = Category::findOrFail($id);
+        $category->products()->detach();
         $category->delete();
 
-        return new CategoryResource($category);
+        return new BaseResource([
+            'message' => 'Deleted'
+        ]);
     }
 }
