@@ -25,4 +25,11 @@ class AppServiceProvider extends ServiceProvider
     {
         //
     }
+
+    /**
+     * @var string[]
+     */
+    public $bindings = [
+        \App\Contracts\ImportDriverInterface::class => \App\Utilities\JsonFileImportDriver::class,
+    ];
 }
