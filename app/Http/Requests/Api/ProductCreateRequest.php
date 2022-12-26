@@ -26,8 +26,8 @@ class ProductCreateRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'between:3,12'],
-            Product::CATEGORIES_KEY => ['required', 'array'],
-            Product::CATEGORIES_KEY.'.*' => ['integer', 'exists:categories,id'],
+            'categories' => ['required', 'array'],
+            'categories.*' => ['integer', 'exists:categories,id'],
             'price' => ['required', 'numeric', 'between:0,200'],
         ];
     }
