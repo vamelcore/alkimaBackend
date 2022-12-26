@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api;
 
+use App\Models\Product;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ProductUpdateRequest extends FormRequest
@@ -25,8 +26,8 @@ class ProductUpdateRequest extends FormRequest
     {
         return [
             'title' => ['nullable', 'string', 'between:3,12'],
-            'categories' => ['nullable', 'array'],
-            'categories.*' => ['integer', 'exists:categories,id'],
+            Product::CATEGORIES_KEY => ['nullable', 'array'],
+            Product::CATEGORIES_KEY.'.*' => ['integer', 'exists:categories,id'],
             'price' => ['nullable', 'numeric', 'between:0,200'],
         ];
     }

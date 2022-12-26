@@ -14,6 +14,8 @@ class Product extends Model
         'price',
     ];
 
+    public const CATEGORIES_KEY = 'categories';
+
     public function categories()
     {
         return $this->belongsToMany(Category::class);

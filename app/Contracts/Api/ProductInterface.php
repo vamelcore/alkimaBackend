@@ -2,8 +2,6 @@
 
 namespace App\Contracts\Api;
 
-use App\Http\Requests\Api\ProductCreateRequest;
-use App\Http\Requests\Api\ProductUpdateRequest;
 use Illuminate\Http\JsonResponse;
 
 interface ProductInterface
@@ -14,10 +12,10 @@ interface ProductInterface
     public function list(): JsonResponse;
 
     /**
-     * @param ProductCreateRequest $request
+     * @param array $data
      * @return JsonResponse
      */
-    public function create(ProductCreateRequest $request): JsonResponse;
+    public function create(array $data): JsonResponse;
 
     /**
      * @param int $id
@@ -26,11 +24,11 @@ interface ProductInterface
     public function show(int $id): JsonResponse;
 
     /**
-     * @param ProductUpdateRequest $request
+     * @param array $data
      * @param int $id
      * @return JsonResponse
      */
-    public function update(ProductUpdateRequest $request, int $id): JsonResponse;
+    public function update(array $data, int $id): JsonResponse;
 
     /**
      * @param int $id

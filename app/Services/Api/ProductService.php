@@ -3,8 +3,6 @@
 namespace App\Services\Api;
 
 use App\Contracts\Api\ProductInterface;
-use App\Http\Requests\Api\ProductCreateRequest;
-use App\Http\Requests\Api\ProductUpdateRequest;
 use App\Http\Resources\Api\ProductResource;
 use App\Http\Resources\BaseResource;
 use App\Models\Product;
@@ -25,15 +23,19 @@ class ProductService implements ProductInterface
     }
 
     /**
-     * @param ProductCreateRequest $request
+     * @param array $data
      * @return JsonResponse
      */
-    public function create(ProductCreateRequest $request): JsonResponse
+    public function create(array $data): JsonResponse
     {
         $product = new Product();
-        $product->fill($request->all());
+        $product->fill($data);
         $product->save();
-        $product->categories()->attach($request->get('categories'));
+        if (isset($data[Product::CATEGORIES_KEY])
+            && is_array($data[Product::CATEGORIES_KEY])
+            && !empty($data[Product::CATEGORIES_KEY])) {
+            $product->categories()->attach($data['categories']);
+        }
         $product->load('categories');
 
         return (new ProductResource($product))->response();
@@ -51,18 +53,20 @@ class ProductService implements ProductInterface
     }
 
     /**
-     * @param ProductUpdateRequest $request
+     * @param array $data
      * @param int $id
      * @return JsonResponse
      */
-    public function update(ProductUpdateRequest $request, int $id): JsonResponse
+    public function update(array $data, int $id): JsonResponse
     {
         $product = Product::findOrFail($id);
-        $product->fill($request->all());
+        $product->fill($data);
         $product->save();
-        $request->whenFilled('categories', function ($input) use ($product) {
-            $product->categories()->sync($input);
-        });
+        if (isset($data[Product::CATEGORIES_KEY])
+            && is_array($data[Product::CATEGORIES_KEY])
+            && !empty($data[Product::CATEGORIES_KEY])) {
+            $product->categories()->sync($data['categories']);
+        }
         $product->load('categories');
 
         return (new ProductResource($product))->response();
