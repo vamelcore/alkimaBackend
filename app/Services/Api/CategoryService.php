@@ -3,8 +3,6 @@
 namespace App\Services\Api;
 
 use App\Contracts\Api\CategoryInterface;
-use App\Http\Requests\Api\CategoryCreateRequest;
-use App\Http\Requests\Api\CategoryUpdateRequest;
 use App\Http\Resources\Api\CategoryResource;
 use App\Http\Resources\BaseResource;
 use App\Models\Category;
@@ -24,13 +22,13 @@ class CategoryService implements CategoryInterface
     }
 
     /**
-     * @param CategoryCreateRequest $request
+     * @param array $data
      * @return JsonResponse
      */
-    public function create(CategoryCreateRequest $request): JsonResponse
+    public function create(array $data): JsonResponse
     {
         $category = new Category();
-        $category->fill($request->all());
+        $category->fill($data);
         $category->save();
 
         return (new CategoryResource($category))->response();
@@ -48,14 +46,14 @@ class CategoryService implements CategoryInterface
     }
 
     /**
-     * @param CategoryUpdateRequest $request
+     * @param array $data
      * @param int $id
      * @return JsonResponse
      */
-    public function update(CategoryUpdateRequest $request, int $id): JsonResponse
+    public function update(array $data, int $id): JsonResponse
     {
         $category = Category::findOrFail($id);
-        $category->fill($request->all());
+        $category->fill($data);
         $category->save();
 
         return (new CategoryResource($category))->response();

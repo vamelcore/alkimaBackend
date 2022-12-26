@@ -2,8 +2,6 @@
 
 namespace App\Contracts\Api;
 
-use App\Http\Requests\Api\CategoryCreateRequest;
-use App\Http\Requests\Api\CategoryUpdateRequest;
 use Illuminate\Http\JsonResponse;
 
 interface CategoryInterface
@@ -14,10 +12,10 @@ interface CategoryInterface
     public function list(): JsonResponse;
 
     /**
-     * @param CategoryCreateRequest $request
+     * @param array $data
      * @return JsonResponse
      */
-    public function create(CategoryCreateRequest $request): JsonResponse;
+    public function create(array $data): JsonResponse;
 
     /**
      * @param int $id
@@ -26,11 +24,11 @@ interface CategoryInterface
     public function show(int $id): JsonResponse;
 
     /**
-     * @param CategoryUpdateRequest $request
+     * @param array $data
      * @param int $id
      * @return JsonResponse
      */
-    public function update(CategoryUpdateRequest $request, int $id): JsonResponse;
+    public function update(array $data, int $id): JsonResponse;
 
     /**
      * @param int $id
