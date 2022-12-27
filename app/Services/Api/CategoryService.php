@@ -7,6 +7,7 @@ use App\Http\Resources\Api\CategoryResource;
 use App\Http\Resources\BaseResource;
 use App\Models\Category;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Validator;
 
 class CategoryService implements CategoryInterface
 {
@@ -72,5 +73,25 @@ class CategoryService implements CategoryInterface
         return (new BaseResource([
             'message' => 'Deleted'
         ]))->response();
+    }
+
+    /**
+     * @param array $data
+     * @return mixed
+     */
+    public function validate(array $data)
+    {
+        if (isset($data['id']) && intval($data['id'])) {
+            $validation = Validator::make($data, [
+                'id' => ['integer', 'exists:categories,id'],
+                'title' => ['nullable', 'string', 'between:3,12'],
+            ]);
+        } else {
+            $validation = Validator::make($data, [
+                'title' => ['required', 'string', 'between:3,12'],
+            ]);
+        }
+
+        return $validation;
     }
 }

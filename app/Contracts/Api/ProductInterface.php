@@ -35,4 +35,10 @@ interface ProductInterface
      * @return JsonResponse
      */
     public function destroy(int $id): JsonResponse;
+
+    /**
+     * @param array $data
+     * @return mixed
+     */
+    public function validate(array $data);
 }
