@@ -2,15 +2,18 @@
 
 namespace App\Contracts;
 
+use App\Contracts\Api\CrudInterface;
 use Illuminate\Support\Collection;
 
 interface ImportDriverInterface
 {
+
     /**
+     * @param CrudInterface $service
      * @param array $config
      * @return mixed
      */
-    public function setupImport(array $config = []);
+    public function setupImport(CrudInterface $service, array $config = []);
 
 
     /**

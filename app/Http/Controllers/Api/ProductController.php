@@ -2,24 +2,21 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Contracts\Api\ProductInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\ProductCreateRequest;
 use App\Http\Requests\Api\ProductUpdateRequest;
+use App\Services\Api\ProductService;
 
 class ProductController extends Controller
 {
     /**
-     * @var ProductInterface
+     * @var ProductService
      */
     public $service;
 
-    /**
-     * @param ProductInterface $service
-     */
-    public function __construct(ProductInterface $service)
+    public function __construct()
     {
-        $this->service = $service;
+        $this->service = new ProductService();
     }
 
     /**

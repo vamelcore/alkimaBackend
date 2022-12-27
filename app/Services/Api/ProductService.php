@@ -2,14 +2,14 @@
 
 namespace App\Services\Api;
 
-use App\Contracts\Api\ProductInterface;
+use App\Contracts\Api\CrudInterface;
 use App\Http\Resources\Api\ProductResource;
 use App\Http\Resources\BaseResource;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
 
-class ProductService implements ProductInterface
+class ProductService implements CrudInterface
 {
     /**
      * @return JsonResponse
@@ -98,15 +98,15 @@ class ProductService implements ProductInterface
             $validation = Validator::make($data, [
                 'id' => ['integer', 'exists:products,id'],
                 'title' => ['nullable', 'string', 'between:3,12'],
-                'categories' => ['nullable', 'array'],
-                'categories.*' => ['integer', 'exists:categories,id'],
+                Product::CATEGORIES_KEY => ['nullable', 'array'],
+                Product::CATEGORIES_KEY.'.*' => ['integer', 'exists:categories,id'],
                 'price' => ['nullable', 'numeric', 'between:0,200'],
             ]);
         } else {
             $validation = Validator::make($data, [
                 'title' => ['required', 'string', 'between:3,12'],
-                'categories' => ['required', 'array'],
-                'categories.*' => ['integer', 'exists:categories,id'],
+                Product::CATEGORIES_KEY => ['required', 'array'],
+                Product::CATEGORIES_KEY.'.*' => ['integer', 'exists:categories,id'],
                 'price' => ['required', 'numeric', 'between:0,200'],
             ]);
         }

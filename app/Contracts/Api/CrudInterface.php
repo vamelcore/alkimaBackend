@@ -4,7 +4,7 @@ namespace App\Contracts\Api;
 
 use Illuminate\Http\JsonResponse;
 
-interface CategoryInterface
+interface CrudInterface
 {
     /**
      * @return JsonResponse

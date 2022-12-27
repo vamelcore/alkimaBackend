@@ -2,14 +2,14 @@
 
 namespace App\Services\Api;
 
-use App\Contracts\Api\CategoryInterface;
+use App\Contracts\Api\CrudInterface;
 use App\Http\Resources\Api\CategoryResource;
 use App\Http\Resources\BaseResource;
 use App\Models\Category;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
 
-class CategoryService implements CategoryInterface
+class CategoryService implements CrudInterface
 {
     /**
      * @return JsonResponse

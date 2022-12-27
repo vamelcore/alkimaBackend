@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Contracts\Api\ProductInterface;
 use App\Contracts\ImportDriverInterface;
+use App\Services\Api\ProductService;
 use Illuminate\Console\Command;
 
 class ParseJsonProducts extends Command
@@ -13,7 +13,7 @@ class ParseJsonProducts extends Command
      *
      * @var string
      */
-    protected $signature = 'command:parse:json:products';
+    protected $signature = 'command:parse:json:products {filePath}';
 
     /**
      * The console command description.
@@ -23,27 +23,22 @@ class ParseJsonProducts extends Command
     protected $description = 'Command for parsing products from file';
 
     /**
-     * @var string
-     */
-    protected $importFile = 'import/json/products.json';
-
-    /**
      * @var ImportDriverInterface
      */
     protected $driver;
+
     /**
-     * @var ProductInterface
+     * @var ProductService
      */
     protected $service;
 
     /**
      * @param ImportDriverInterface $driver
-     * @param ProductInterface $service
      */
-    public function __construct(ImportDriverInterface $driver, ProductInterface $service)
+    public function __construct(ImportDriverInterface $driver)
     {
         $this->driver = $driver;
-        $this->service = $service;
+        $this->service = new ProductService();
 
         parent::__construct();
     }
@@ -55,23 +50,15 @@ class ParseJsonProducts extends Command
      */
     public function handle()
     {
-        $file = storage_path($this->importFile);
+        $file = storage_path($this->argument('filePath'));
 
-        $items = $this->driver->setupImport(['filePath' => $file])->processImport();
+        $items = $this->driver->setupImport($this->service, ['filePath' => $file])->processImport();
 
-        foreach ($items as $key => $item) {
-            $validation = $this->service->validate($item);
-            if ($validation->fails()) {
-                $this->error('Element ' . $key . ' has errors: ' . $validation->errors());
-                continue;
-            }
-
-            if (isset($item['id']) && intval($item['id'])) {
-                $this->service->update($item, $item['id']);
-                $this->info('Element with id ' . $item['id'] . ' successfully updated');
+        foreach ($items as $item) {
+            if ($item['success']) {
+                $this->info($item['message']);
             } else {
-                $this->service->create($item);
-                $this->info('Element ' . $key . ' successfully added');
+                $this->error($item['message']);
             }
         }
 

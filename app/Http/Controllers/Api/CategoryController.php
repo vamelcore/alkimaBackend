@@ -2,25 +2,22 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Contracts\Api\CategoryInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\CategoryCreateRequest;
 use App\Http\Requests\Api\CategoryUpdateRequest;
+use App\Services\Api\CategoryService;
 use OpenApi\Annotations as OA;
 
 class CategoryController extends Controller
 {
     /**
-     * @var CategoryInterface
+     * @var CategoryService
      */
     public $service;
 
-    /**
-     * @param CategoryInterface $service
-     */
-    public function __construct(CategoryInterface $service)
+    public function __construct()
     {
-        $this->service = $service;
+        $this->service = new CategoryService();
     }
 
     /**
