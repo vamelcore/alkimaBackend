@@ -30,8 +30,8 @@ class CategoryController extends Controller
      * path="/categories",
      * operationId="categoriesList",
      * tags={"Categories"},
-     * summary="Get category list",
-     * description="Get category list",
+     * summary="Get categories list",
+     * description="Get categories list",
      *     @OA\Parameter(
      *         name="page",
      *         in="query",
@@ -131,7 +131,7 @@ class CategoryController extends Controller
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
-     *         description="CategoruId",
+     *         description="CategoryId",
      *         required=true,
      *         @OA\Schema(
      *             type="integer",
@@ -175,7 +175,7 @@ class CategoryController extends Controller
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
-     *         description="CategoruId",
+     *         description="CategoryId",
      *         required=true,
      *         @OA\Schema(
      *             type="integer",
@@ -187,7 +187,7 @@ class CategoryController extends Controller
      *            @OA\Schema(
      *               type="object",
      *               required={"title"},
-     *               @OA\Property(property="title", type="string"),
+     *               @OA\Property(property="title", type="string", description="Category title"),
      *            ),
      *        ),
      *         @OA\MediaType(
@@ -254,7 +254,7 @@ class CategoryController extends Controller
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
-     *         description="CategoruId",
+     *         description="CategoryId",
      *         required=true,
      *         @OA\Schema(
      *             type="integer",
