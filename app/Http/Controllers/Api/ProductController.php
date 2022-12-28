@@ -37,6 +37,9 @@ class ProductController extends Controller
      *         in="query",
      *         description="Page",
      *         required=false,
+     *         @OA\Schema(
+     *             type="integer",
+     *         ),
      *     ),
      *     @OA\Response(
      *         response=200,
@@ -73,7 +76,7 @@ class ProductController extends Controller
      *               required={"title","price", "categories[]"},
      *               @OA\Property(property="title", type="string", description="Product title"),
      *               @OA\Property(property="price", type="number", description="Product price"),
-     *               @OA\Property(property="categories[]", type="array", collectionFormat="multi", @OA\Items(type="number")),
+     *               @OA\Property(property="categories[]", type="array", @OA\Items(type="number")),
      *            ),
      *        ),
      *         @OA\MediaType(
@@ -193,7 +196,7 @@ class ProductController extends Controller
      *               required={"title","price", "categories[]"},
      *               @OA\Property(property="title", type="string", description="Product title"),
      *               @OA\Property(property="price", type="number", description="Product price"),
-     *               @OA\Property(property="categories[]", type="array", collectionFormat="multi", @OA\Items(type="number")),
+     *               @OA\Property(property="categories[]", type="array", @OA\Items(type="number")),
      *            ),
      *        ),
      *         @OA\MediaType(
@@ -275,7 +278,7 @@ class ProductController extends Controller
      *             @OA\Property(
      *                 property="data",
      *                 type="object",
-     *                 @OA\Property(type="stringr", example="deleted", description="User identifier", property="message"),
+     *                 @OA\Property(type="string", example="deleted", description="User identifier", property="message"),
      *             )
      *         )
      *     ),

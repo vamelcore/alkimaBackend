@@ -37,6 +37,9 @@ class CategoryController extends Controller
      *         in="query",
      *         description="Page",
      *         required=false,
+     *         @OA\Schema(
+     *             type="integer",
+     *         ),
      *     ),
      *     @OA\Response(
      *         response=200,
@@ -267,7 +270,7 @@ class CategoryController extends Controller
      *             @OA\Property(
      *                 property="data",
      *                 type="object",
-     *                 @OA\Property(type="stringr", example="deleted", description="User identifier", property="message"),
+     *                 @OA\Property(type="string", example="deleted", description="User identifier", property="message"),
      *             )
      *         )
      *     ),
